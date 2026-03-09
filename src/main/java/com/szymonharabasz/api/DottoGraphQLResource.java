@@ -2,14 +2,18 @@ package com.szymonharabasz.api;
 
 import com.szymonharabasz.entities.Dotto;
 import com.szymonharabasz.service.DottoService;
-import jakarta.inject.Inject;
 import org.eclipse.microprofile.graphql.*;
+
+import java.util.List;
 
 @GraphQLApi
 public class DottoGraphQLResource {
 
-    @Inject
     DottoService dottoService;
+
+    public DottoGraphQLResource(DottoService dottoService) {
+        this.dottoService = dottoService;
+    }
 
     @Query
     @Description("Say hello")
@@ -18,15 +22,15 @@ public class DottoGraphQLResource {
     }
 
     @Mutation
-    public DottoOutput create(DottoInput dottoInput) {
-        Dotto newDotto = dottoService.create(dottoInput);
-        return new DottoOutput(
-                newDotto.id.toString(),
-                newDotto.getTitle(),
-                newDotto.getDescription(),
-                newDotto.getUserId(),
-                newDotto.getRating(),
-                newDotto.getCreatedAt()
-        );
+    public List<DottoOutput> create(String userId, DottoInput dottoInput) {
+        List<Dotto> dottos = dottoService.create(userId, dottoInput);
+        return dottos.stream().map(dotto -> new DottoOutput(
+                dotto.getId(),
+                dotto.getTitle(),
+                dotto.getDescription(),
+                dotto.getScore(),
+                dotto.getCreatedAt(),
+                dotto.getTags()
+        )).toList();
     }
 }

@@ -1,18 +1,24 @@
 package com.szymonharabasz.entities;
 
-import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-public class Dotto extends PanacheMongoEntity {
+public class Dotto {
+    String id;
     String title;
     String description;
-    String userId;
-    @Min(0) @Max(5)
-    Integer rating;
+    @Min(0) @Max(10)
+    Integer score;
     LocalDateTime createdAt;
+    List<Tag> tags;
+
+    public Dotto withId(String id) {
+        this.id = id;
+        return this;
+    }
 
     public Dotto withTitle(String title) {
         this.title = title;
@@ -24,19 +30,23 @@ public class Dotto extends PanacheMongoEntity {
         return this;
     }
 
-    public Dotto withUserId(String userId) {
-        this.userId = userId;
+    public Dotto withScore(Integer score) {
+        this.score = score;
         return this;
     }
 
-    public Dotto withRating(Integer rating) {
-        this.rating = rating;
+    public Dotto withTags(List<Tag> tags) {
+        this.tags = tags;
         return this;
     }
 
     public Dotto createdAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
         return this;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -47,15 +57,15 @@ public class Dotto extends PanacheMongoEntity {
         return description;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public Integer getRating() {
-        return rating;
+    public Integer getScore() {
+        return score;
     }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
     }
 }
